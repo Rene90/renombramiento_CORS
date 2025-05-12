@@ -67,10 +67,19 @@ fn process_batch(base_dir: PathBuf) -> io::Result<()> {
                 let file_type = &file_name[12..13]; // "C", "G", etc.
             
                 // Determinar la nueva letra
-                let new_letter = if hour_part.chars().next().unwrap().is_alphabetic() {
-                    hour_part.chars().next().unwrap().to_lowercase().to_string()
+                let new_letter = if let Some(first_char) = hour_part.chars().next() {
+                    if first_char.is_alphabetic() {
+                        // 'a' a 'j' → 'k' a 't'
+                        let mapped_char = ((first_char.to_ascii_lowercase() as u8) + 10) as char;
+                        mapped_char.to_string()
+                    } else {
+                        letter_mapping
+                            .get(hour_part)
+                            .unwrap_or(&hour_part.to_string())
+                            .clone()
+                    }
                 } else {
-                    letter_mapping.get(hour_part).unwrap_or(&hour_part.to_string()).clone()
+                    hour_part.to_string()//si no puede mapear deja el nombre tal cual
                 };
             
                 // Nuevo nombre base: FICU + día + letra
@@ -311,8 +320,8 @@ fn main() -> io::Result<()> {
 
 fn create_letter_mapping() -> HashMap<String, String> {
     let mut mapping = HashMap::new();
-    // Secuencia: 00=o, 10=p, 20=q, 30=r, ..., 90=x
-    let letters = ['o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x'];
+    // Secuencia: 00=a, 10=b, 20=c, 30=d, ..., 90=i
+    let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
     for (i, c) in letters.iter().enumerate() {
         mapping.insert(format!("{}0", i ), c.to_string());
     }
