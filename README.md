@@ -1,8 +1,8 @@
-# 🛰️ RINEX Monitor y Procesador Automático
+# 🛰️ Renombramiento automatico de archivos RINEX
 
-Este proyecto contiene dos scripts para automatizar el monitoreo y procesamiento de archivos RINEX (observación y navegación) provenientes de estaciones GNSS. 
+Este proyecto contiene dos scripts para automatizar el renombramiento de archivos RINEX (observación y navegación) provenientes de la estación GNSS CORS South S9 de la cúpula del edificio A de la Facultad de Ingenieria en Ciudad Universitario. El renombramiento de archivos generados por la estación es un requisito para cumplir con las normas del INEGI y que esta estación al cumplir los lineamientos, sea incorporada a la Red Nacional Activa Geodesica.  
 
-El sistema detecta archivos nuevos, los clasifica, ejecuta `convbin` para agregar metadatos, los renombra y los comprime automáticamente.
+El sistema detecta archivos nuevos, los clasifica, ejecuta el modulo de RTKLIB`convbin` para agregar los campos de OBSERVER/AGENCY, los renombra y los comprime automáticamente descartando el archivo de navegación de la constelación Beidou.
 
 ---
 
@@ -23,7 +23,7 @@ El sistema detecta archivos nuevos, los clasifica, ejecuta `convbin` para agrega
 ### 🖥 Windows (recomendado)
 - PowerShell 5.1 o superior.
 - [.NET Framework 4.7+](https://dotnet.microsoft.com/en-us/download/dotnet-framework)
-- [`convbin`](https://rtkexplorer.com/downloads/) del paquete RTKLIB (debe estar junto al `.exe` Rust o en el PATH).
+- [`convbin`](https://rtkexplorer.com/downloads/) del paquete RTKLIB (debe estar junto al `.exe` Rust o en el PATH), el ejecutable lo he creado compilando el código fuente del modulo rtkconv presente en el repositorio mencionado de RTKLIB.
 - [Rust (opcional)](https://www.rust-lang.org/) si deseas compilar desde código fuente.
 
 ---
