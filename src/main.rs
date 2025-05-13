@@ -155,19 +155,23 @@ for (base_name, files) in files_by_hour {
     }
 
     //mover los archivos despues de que se hayan cambiado los nombres y zippeado los archivos
-    let dir_name = base_dir.file_name()
-        .and_then(|n| n.to_str())
-        .unwrap_or("testcors");
-    let beidou_dir = base_dir.with_file_name(format!("{}_beidou", dir_name));
-    if !beidou_dir.exists() {
-        fs::create_dir(&beidou_dir)?;
+    //Subir 5 niveles desde base_dir
+    let mut parent: &Path = &base_dir;
+    for _ in 0..5 {
+        parent = parent.parent().unwrap_or(parent);
     }
 
-    // Mover archivos no ZIP al directorio _beidou
+    // Crear carpeta "beidou" a ese nivel
+    let beidou_dir = parent.join("beidou");
+    if !beidou_dir.exists() {
+        fs::create_dir_all(&beidou_dir)?;
+    }
+
+    // Mover archivos no ZIP (los BeiDou .25C) al nuevo directorio
     for entry in fs::read_dir(&base_dir)? {
         let entry = entry?;
         let path = entry.path();
-        
+
         if let Some(file_name) = path.file_name().and_then(|n| n.to_str()) {
             if !file_name.ends_with(".zip") && !path.is_dir() {
                 let destination = beidou_dir.join(file_name);
