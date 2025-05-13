@@ -22,7 +22,6 @@ El sistema detecta archivos nuevos, los clasifica, ejecuta el modulo de RTKLIB`c
 
 ### 🖥 Windows (recomendado)
 - PowerShell 5.1 o superior.
-- [.NET Framework 4.7+](https://dotnet.microsoft.com/en-us/download/dotnet-framework)
 - [`convbin`](https://rtkexplorer.com/downloads/) del paquete RTKLIB (debe estar junto al `.exe` Rust o en el PATH), el ejecutable lo he creado compilando el código fuente del modulo rtkconv presente en el repositorio mencionado de RTKLIB.
 - [Rust (opcional)](https://www.rust-lang.org/) si deseas compilar desde código fuente.
 
