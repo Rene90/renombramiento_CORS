@@ -1,6 +1,6 @@
 # 🛰️ Renombramiento automatico de archivos RINEX
 
-Este proyecto contiene dos scripts para automatizar el renombramiento de archivos RINEX (observación y navegación) provenientes de la estación GNSS CORS South S9 de la cúpula del edificio A de la Facultad de Ingenieria en Ciudad Universitario. El renombramiento de archivos generados por la estación es un requisito para cumplir con las normas del INEGI y que esta estación al cumplir los lineamientos, sea incorporada a la Red Nacional Activa Geodesica.  
+Este proyecto contiene dos scripts para automatizar el renombramiento de archivos RINEX (observación y navegación) provenientes de la estación GNSS CORS South S9 de la cúpula del edificio A de la Facultad de Ingenieria en Ciudad Universitario. El renombramiento de archivos generados por la estación es un requisito para cumplir con las normas del INEGI y que esta estación al cumplir los lineamientos, sea incorporada a la Red Geodesica Nacional Activa .  
 
 El sistema detecta archivos nuevos, los clasifica, ejecuta el modulo de RTKLIB`convbin` para agregar los campos de OBSERVER/AGENCY, los renombra y los comprime automáticamente descartando el archivo de navegación de la constelación Beidou.
 
