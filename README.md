@@ -68,16 +68,18 @@ $rustScript = "C:\ruta\a\rinex_processor.exe"       # Ruta al ejecutable Rust
 ### 3. Ejecuta el script PowerShell
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\monitor_rinex.ps1
+
+Set-ExecutionPolicy RemoteSigned -Scope Process -Force
+.\monitor_rinex.ps1
 ```
 
 ---
 
 ## 🧠 Notas adicionales
 
-- Los archivos `.25O`, `.25G`, `.25N`, etc., deben seguir el formato `FICU<doy><hora>.25<tipo>`.
-- Asegúrate de que `convbin` esté disponible en el mismo directorio que `rinex_processor.exe` o en el PATH.
-- Puedes ejecutar el script PowerShell al inicio del sistema o como tarea programada.
+
+- Asegura de que `convbin` esté disponible en el mismo directorio que `rinex_processor.exe` o en el PATH.
+
 
 ---
 
