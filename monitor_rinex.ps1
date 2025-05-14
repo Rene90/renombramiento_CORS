@@ -1,8 +1,8 @@
 # Configuración
-$baseFolder = "C:\Users\rob_r\Documents\pfStanford\RINEX"
-$rustScript = "C:\Users\rob_r\Documents\pfStanford\rinexInegi\rinexInegi.exe"
-$logFile = "C:\Users\rob_r\Documents\pfStanford\rinexInegi\rinex_monitor.log"
-$stateFile = "$env:TEMP\rinex_processor_state.json"
+$baseFolder = "D:\EstacionDeReferenciaFiUNAM\Testcors\RINEX"
+$rustScript = "D:\EstacionDeReferenciaFiUNAM\renombramiento_CORS-master\rinexInegi.exe"
+$logFile = "D:\EstacionDeReferenciaFiUNAM\renombramiento_CORS-master\rinex_monitor.log"
+$stateFile = "D:\EstacionDeReferenciaFiUNAM\renombramiento_CORS-master\rinex_processor_state.json"
 
 function Log-Message {
     param([string]$message)
