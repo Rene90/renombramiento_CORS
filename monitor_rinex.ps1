@@ -14,12 +14,9 @@ function Log-Message {
 function Get-UtcDOYFolders {
     $utcNow = Get-Date -AsUTC
     $yearToday = $utcNow.Year
-    $yearYesterday = ($utcNow.AddDays(-1)).Year
     $doyToday = $utcNow.DayOfYear
-    $doyYesterday = ($utcNow.AddDays(-1)).DayOfYear
 
     return @(
-        Join-Path -Path $baseFolder -ChildPath "$yearYesterday\$doyYesterday\FICU\CHA0",
         Join-Path -Path $baseFolder -ChildPath "$yearToday\$doyToday\FICU\CHA0"
     )
 }
@@ -66,13 +63,65 @@ function Process-New-Files {
 
 Log-Message "=== INICIO MONITOREO (UTC) ==="
 Log-Message "Carpeta base: $baseFolder"
+function Start-Watcher {
+    param (
+        [string]$folderPath
+    )
 
-try {
-    while ($true) {
-        Process-New-Files
-        Start-Sleep -Seconds 60
+    Log-Message "Iniciando watcher para: $folderPath"
+
+    $watcher = New-Object System.IO.FileSystemWatcher
+    $watcher.Path = (Resolve-Path $folderPath).Path
+    $watcher.Filter = "FICU*.*"
+    $watcher.IncludeSubdirectories = $false
+    $watcher.EnableRaisingEvents = $true
+
+    return Register-ObjectEvent -InputObject $watcher -EventName Changed -Action {
+        Start-Sleep -Seconds 90  # Esperar copia completa desde la estación
+        try {
+            Process-New-Files
+        }
+        catch {
+            Log-Message "ERROR al procesar archivos: $_"
+        }
     }
 }
-finally {
-    Log-Message "=== MONITOR DETENIDO ==="
+
+# Inicialización
+$lastUtcDate = (Get-Date -AsUTC).Date
+$folder = Get-UtcDOYFolders
+
+if (-not (Test-Path $folder)) {
+    Log-Message "Carpeta del día actual no encontrada: $folder"
+    exit 1
+}
+
+# Iniciar watcher inicial
+$global:watcherSubscription = Start-Watcher -folderPath $folder
+
+Write-Host "Monitoreando: $folder"
+Write-Host "Presiona Ctrl+C para salir."
+
+# Loop para detectar cambio de día UTC y reiniciar watcher
+while ($true) {
+    Start-Sleep -Seconds 60
+
+    $currentUtcDate = (Get-Date -AsUTC).Date
+    if ($currentUtcDate -ne $lastUtcDate) {
+        # Cambió el día UTC
+        Log-Message "Cambio detectado de día UTC. Reiniciando watcher..."
+
+        # Actualizar fecha y carpeta
+        $lastUtcDate = $currentUtcDate
+        $folder = Get-UtcDOYFolders
+
+        if (Test-Path $folder) {
+            # Detener watcher anterior
+            Unregister-Event -SourceIdentifier $watcherSubscription.Name -ErrorAction SilentlyContinue
+            $watcherSubscription = Start-Watcher -folderPath $folder
+            Write-Host "Watcher activo en: $folder"
+        } else {
+            Log-Message "Carpeta aún no disponible: $folder"
+        }
+    }
 }
