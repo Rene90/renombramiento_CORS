@@ -268,14 +268,15 @@ fn main() -> io::Result<()> {
 
             if file_type == "o" {
                 // Ejecutar convbin para archivo de observación
-                let status = Command::new("./convbin")
-                    .args(&[
-                        "-r", "rinex",
-                        "-o", new_file_path.to_str().unwrap(), // nombre de salida
-                        "-ho", "FI/UNAM",
-                        file_path.to_str().unwrap()             // nombre original
-                    ])
-                    .status()?;
+                let status = Command::new("./convbin.exe")
+                            .args(&[
+                                "-r", "rinex",
+                                "-v", "2.11",                                      // Fuerza versión RINEX 2.11
+                                "-o", new_file_path.to_str().unwrap(),             // Archivo de salida
+                                "-ho", "FI/UNAM",                                  // Campo Observer / Agency
+                                file_path.to_str().unwrap()                        // Archivo original
+                            ])
+                            .status()?;
 
                 if !status.success() {
                     eprintln!("Error ejecutando convbin para {:?}", file_path);
