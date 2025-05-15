@@ -127,7 +127,7 @@ for (base_name, files) in files_by_hour {
 
                 if file_type == "o" {
                     // Ejecutar convbin para archivo de observación
-                    let status = Command::new("./convbin")
+                    let status = Command::new("./convbin.exe")
                         .args(&[
                             "-r", "rinex",
                             "-o", new_file_path.to_str().unwrap(), // nombre de salida
